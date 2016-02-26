@@ -52,9 +52,83 @@ int *getinputFunction(int num, int *charInput);
 //************************************
 void outputFunction(int *charOutput);
 
+//function pointer
+long sum(long a, long b);
+long product(long a, long b);
+
+//point parament
+double squared(double);
+double cubed(double);
+double summarray(const double data[], size_t len, double(*pfn)(double));
+
+//int max( const int data[],const size_t len );
+//long max(const long data[], const size_t len);
+template<typename T>T max(const T x[], const size_t len)
+{
+	T maxium{ x[0] };
+	for (size_t i{ 1 }; i < len; i++)
+		if (maxium < x[i])
+			maxium = x[i];
+	return maxium;
+}
+
+template<typename T1,typename T2>
+//decltype(v1[0] * v2[0]) f(T1 v1[], T2 v2[], const size_t count)
+auto f(T1 v1[],T2 v2[],const size_t count)->decltype(v1[0] * v2[0])
+{
+	decltype(v1[0] * v2[0]) sum{};
+	for (size_t i{}; i < count; i++) sum += v1[i] * v2[i];
+	return sum;
+}
+
 int main(int argc ,char*argv[])
 {
+	//function overload
+	int small[] { 1,24,34,22 };
+	long medium[]{ 23,245,123,1 };
+
+	const size_t lensmall{ _countof(small) };
+
+	cout << "Result type is " << typeid(f(small, medium, 4)).name() << endl;
+	cout << "Result  " << f(small, medium, 4) << endl;
+
+	cout << endl << max(small, lensmall);
+	//try catch
+	int counts[]{ 34,54,0,27,0,10,0 };
+	double time{ 60 };
+	int hour{};
+
+
+
+	for (auto count : counts)
+	{
+		try {
+			cout << endl << "Hour" << ++hour;
+
+			if (0 == count)
+				throw "Zero coutn";
+			cout << "minutes oer item:" << time / count;
+		}
+		catch (const char aMessage[])
+		{
+			cout << endl << aMessage << endl;
+		}
+	}
+	//point parament
+	double _data[]{ 1.5,2.5,3.5,4.5,5.5,6.5,7.5 };
+	size_t len{ _countof(_data) };
+
+	cout << endl << "Sum of squares =" << summarray(_data, len, squared);
+	cout << endl << "Sum of Cubes =" << summarray(_data, len, cubed);
 	//recursion
+	long(*pdo_it)(long, long);
+	pdo_it = product;
+	cout << endl << "3*5=" << pdo_it(3, 5);
+
+	pdo_it = sum;
+	cout << endl << "3*(4+5)+6=" << pdo_it(product(3, pdo_it(4, 5)), 6);
+	cout << endl;
+
 	int input{11};
 	//cin>> input;
 	int data[15]{1,2,3,4};
@@ -68,6 +142,8 @@ int main(int argc ,char*argv[])
 		//outputFunction(pcharInput);
 		outputFunction(getinputFunction(input, pcharInput));
 	}
+
+	
 	//{
 		//inputFunction(input, pcharInput);
 	//}
@@ -505,3 +581,52 @@ void outputFunction(int * charOutput)
 {
 	cout << "input is  ::" << *charOutput << endl;
 }
+
+long sum(long a, long b)
+{
+	return a+b;
+}
+
+long product(long a, long b)
+{
+	return a*b;
+}
+
+double squared(double x)
+{
+	return x*x;
+}
+
+double cubed(double x)
+{
+	return x*x*x;
+}
+
+double summarray(const double data[], size_t len, double(*pfun)(double))
+{
+	double total{};
+	for (size_t i{}; i < len; i++)
+		total += pfun(data[i]);
+	return total;
+}
+
+/*int max(const int data[], const size_t len)
+{
+	//return 0;
+	int test{ _countof(data) };
+	int maxium{ data[0] };
+	for (size_t i{ 1 }; i < len; i++)
+		if (maxium < data[i])
+			maxium = data[i];
+	return maxium;
+}
+
+long max(const long data[], const size_t len)
+{
+	//return 0;
+	long maxium{ data[0] };
+	for (size_t i{ 1 }; i < len; i++)
+		if (maxium < data[i])
+			maxium = data[i];
+	return maxium;
+}*/
