@@ -3,10 +3,14 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <cstdlib>
+#include <cctype>
 #include <iomanip>
 #include <cmath>
+#include <cstring>
 using std::cout;
 using std::cin;
+using std::cerr;
 using std::endl;
 using std::hex;
 using std::dec;
@@ -14,8 +18,8 @@ using std::setw;
 
 #define _countof(_Array) (sizeof(_Array) / sizeof(_Array[0]))
 
-int number{};
-int * pnumber{ &number };
+//int number{};
+//int * pnumber{ &number };
 struct Person {
 	int Name;
 	int age;
@@ -60,6 +64,22 @@ long product(long a, long b);
 double squared(double);
 double cubed(double);
 double summarray(const double data[], size_t len, double(*pfn)(double));
+char *extract(const char*str, size_t& index);
+
+//pratice
+int ascVal(size_t i, const char *p)
+{
+	cout << strlen(p)<<p[i] << endl;
+	if (!p || i > strlen(p))
+		return -1;
+	else
+		return p[i];
+}
+
+int test(size_t i, const char a)
+{
+	return 1;
+}
 
 //int max( const int data[],const size_t len );
 //long max(const long data[], const size_t len);
@@ -80,9 +100,66 @@ auto f(T1 v1[],T2 v2[],const size_t count)->decltype(v1[0] * v2[0])
 	for (size_t i{}; i < count; i++) sum += v1[i] * v2[i];
 	return sum;
 }
+void eatspaces(char *str)
+{
+	size_t i{};
+	size_t j{};
+	while ((*(str + i) = *(str + j++)) != '\0')
+		if (*(str + i) != ' ')
+			i++;
+	return;
+}
 
+double term(const char *str, size_t& index);
+
+double number(const char *str, size_t& index);
+double expr(const char *str);
+
+template<typename T>
+size_t equal(T p1,T p2);
+
+
+const size_t MAX{ 80 };
 int main(int argc ,char*argv[])
 {
+	//equal
+	equal(1, 2);
+	int data1[15]{ 1,2,3,4 };
+	int *pcharInput1{ data1 };
+	cout<<"is p::"<<std::is_pointer<int *>::value<<endl;
+	//pratice
+	int(*pPratice)(size_t, const char*) { ascVal };
+	const char* str{ "A miss is as good as mile." };
+
+	cout << str[3] << endl;
+	equal(*pcharInput1, *pcharInput1);
+	//pPratice = ascVal;/// (0, str);
+	cout<<"The ASCII int is:: "<<pPratice(0, str)<<endl;
+	//caculator
+	char buffer[MAX]{};
+	cout << "Enter an expression,or an empty line to quit." << endl;
+
+	for (;;)
+	{
+		cin.getline(buffer, sizeof buffer);
+		eatspaces(buffer);
+
+		if (!buffer[0])
+			return 0;
+
+		try
+		{
+			cout << "\t= " << expr(buffer) << endl;
+		}
+		catch (const char* pEx)
+		{
+			cerr << pEx << endl;
+			cerr << "Ending program. " << endl;
+			return 1;
+		}
+		
+	}
+
 	//function overload
 	int small[] { 1,24,34,22 };
 	long medium[]{ 23,245,123,1 };
@@ -610,6 +687,123 @@ double summarray(const double data[], size_t len, double(*pfun)(double))
 	return total;
 }
 
+char * extract(const char * str, size_t & index)
+{
+	//return nullptr;
+	char* pstr{};
+	size_t numL{};
+	size_t bufindex{ index };
+		
+	do 
+	{
+		switch (*(str + index))
+		{
+			case')':
+				if (0 == numL)
+				{
+					++index;
+					pstr = new char[index - bufindex];
+					if (!pstr)
+					{
+						throw "Memory allocation failed.";
+					}
+
+					strncpy_s(pstr, index - bufindex, str + bufindex, index - bufindex - 1);
+
+					return pstr;
+				}
+				else
+					numL--;
+					break;
+			case '(':
+				numL++;
+				break;
+		}
+	} while (*(str+index++)!='\0');
+	throw "Ran off the end";
+}
+
+double term(const char * str, size_t & index)
+{
+	double value{};
+	value = number(str, index);
+	while (true)
+	{
+		if (*(str + index) == '*')
+			value *= number(str, ++index);
+		else if (*(str + index) == '/')
+			value /= number(str, ++index);
+		else
+			break;
+	}
+	return value;
+}
+
+double expr(const char *str)
+{
+	double value{};
+	size_t index{};
+	value = term(str, index);
+
+	for (;;)
+	{
+		switch (*(str + index++))
+		{
+		case '\0':
+			return value;
+		case '+':
+			value += term(str, index);
+			break;
+		case '-':
+			value -= term(str, index);
+			break;
+		default:
+			char message[38]{ "Expression evaluation Error. Found:" };
+			strncat_s(message, str + index - 1, 1);
+			throw message;
+			break;
+
+		}
+	}
+}
+
+double number(const char * str, size_t & index)
+{
+	double value{};
+
+	if (*(str + index) == '(')
+	{
+		char* psubstr{};
+		psubstr = extract(str, ++index);
+		value = expr(psubstr);
+		delete[]psubstr;
+		return value;
+	}
+
+	if (!isdigit(*(str + index)))
+	{
+		char message[31]{ "Invalid character in number: " };
+		strncat_s(message, str + index, 1);
+		throw message;
+	}
+
+	while (isdigit(*(str + index)))
+		value = 10 * value + (*(str + index++) - '0');
+
+	if (*(str + index) != '.')
+		return value;
+
+	double factor{ 1.0 };
+	while (isdigit(*(str + (++index))))
+	{
+		factor *= 0.1;
+		value = value + (*(str + index) - '0')*factor;
+	}
+	return value;
+
+	return 0.0;
+}
+
 /*int max(const int data[], const size_t len)
 {
 	//return 0;
@@ -630,3 +824,16 @@ long max(const long data[], const size_t len)
 			maxium = data[i];
 	return maxium;
 }*/
+
+template<typename T>
+size_t equal(T p1, T p2)
+{
+	size_t temp{ 0 };
+	cout << "isPoint:??" << std::is_pointer<T>::value << endl;
+	//cout << p1 == p2 << endl;
+	//if (strcmp(p1 == p2)) {
+		return p1 == p2;
+	//}
+
+	return size_t();
+}
