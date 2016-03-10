@@ -115,24 +115,24 @@ double term(const char *str, size_t& index);
 double number(const char *str, size_t& index);
 double expr(const char *str);
 
-template<typename T>
-size_t equal(T p1,T p2);
+//template<typename T>
+//size_t equal(T p1,T p2);
 
-
+void equal2(const char* p1, const char* p2);
 const size_t MAX{ 80 };
 int main(int argc ,char*argv[])
 {
 	//equal
-	equal(1, 2);
-	int data1[15]{ 1,2,3,4 };
-	int *pcharInput1{ data1 };
-	cout<<"is p::"<<std::is_pointer<int *>::value<<endl;
+	//equal(1, 2);
+	//int data1[15]{ 1,2,3,4 };
+	//int *pcharInput1{ data1 };
+	//cout<<"is p::"<<std::is_pointer<int *>::value<<endl;
 	//pratice
 	int(*pPratice)(size_t, const char*) { ascVal };
-	const char* str{ "A miss is as good as mile." };
-
+	char* str{ "A miss is as good as mile." };
+	//char *p = "test";
 	cout << str[3] << endl;
-	equal(*pcharInput1, *pcharInput1);
+	equal2(str, str);
 	//pPratice = ascVal;/// (0, str);
 	cout<<"The ASCII int is:: "<<pPratice(0, str)<<endl;
 	//caculator
@@ -826,7 +826,7 @@ long max(const long data[], const size_t len)
 }*/
 
 template<typename T>
-size_t equal(T p1, T p2)
+/*size_t equal(T p1, T p2)
 {
 	size_t temp{ 0 };
 	cout << "isPoint:??" << std::is_pointer<T>::value << endl;
@@ -836,4 +836,16 @@ size_t equal(T p1, T p2)
 	//}
 
 	return size_t();
+}*/
+
+void equal2(const char *p1,const char *p2)
+{
+	//size_t temp{ 0 };
+	//cout << "isPoint:??" << std::is_pointer<char *>::value << endl;
+	//cout << p1 == p2 << endl;
+	//if (strcmp(p1 == p2)) {
+	//return p1 == p2;
+	//}
+
+	//return true
 }
