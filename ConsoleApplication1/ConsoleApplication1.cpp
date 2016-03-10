@@ -130,8 +130,9 @@ int main(int argc ,char*argv[])
 	//pratice
 	int(*pPratice)(size_t, const char*) { ascVal };
 	char* str{ "A miss is as good as mile." };
+	char* str2{ "A miss is as good as mile." };
 	//char *p = "test";
-	cout << str[3] << endl;
+	//cout << str[3] << endl;
 	equal2(str, str);
 	//pPratice = ascVal;/// (0, str);
 	cout<<"The ASCII int is:: "<<pPratice(0, str)<<endl;
@@ -825,7 +826,7 @@ long max(const long data[], const size_t len)
 	return maxium;
 }*/
 
-template<typename T>
+//template<typename T>
 /*size_t equal(T p1, T p2)
 {
 	size_t temp{ 0 };
@@ -838,11 +839,12 @@ template<typename T>
 	return size_t();
 }*/
 
-void equal2(const char *p1,const char *p2)
+void equal2(const char * p1,const char * p2)
 {
 	//size_t temp{ 0 };
-	//cout << "isPoint:??" << std::is_pointer<char *>::value << endl;
-	//cout << p1 == p2 << endl;
+	cout << "isPoint:??" << std::is_pointer<char *>::value << endl;
+	cout<<"comp"<<strcmp(p1, p2)<<endl;
+	cout << *p1<<*p2 << endl;
 	//if (strcmp(p1 == p2)) {
 	//return p1 == p2;
 	//}
