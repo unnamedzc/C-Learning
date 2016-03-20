@@ -66,13 +66,14 @@ double cubed(double);
 double summarray(const double data[], size_t len, double(*pfn)(double));
 char *extract(const char*str, size_t& index);
 
+bool inputCheck();s
 //pratice
 int ascVal(size_t i, const char *p)
 {
 	cout << strlen(p)<<p[i] << endl;
 	if (!p || i > strlen(p))
 		return -1;
-	else
+	els
 		return p[i];
 }
 
@@ -118,7 +119,7 @@ double expr(const char *str);
 //template<typename T>
 //size_t equal(T p1,T p2);
 
-void equal2(const char* p1, const char* p2);
+bool equal2(const char* p1, const char* p2);
 const size_t MAX{ 80 };
 int main(int argc ,char*argv[])
 {
@@ -133,7 +134,7 @@ int main(int argc ,char*argv[])
 	char* str2{ "A miss is as good as mile." };
 	//char *p = "test";
 	//cout << str[3] << endl;
-	equal2(str, str);
+	equal2(str, str2);
 	//pPratice = ascVal;/// (0, str);
 	cout<<"The ASCII int is:: "<<pPratice(0, str)<<endl;
 	//caculator
@@ -175,8 +176,6 @@ int main(int argc ,char*argv[])
 	int counts[]{ 34,54,0,27,0,10,0 };
 	double time{ 60 };
 	int hour{};
-
-
 
 	for (auto count : counts)
 	{
@@ -839,12 +838,14 @@ long max(const long data[], const size_t len)
 	return size_t();
 }*/
 
-void equal2(const char * p1,const char * p2)
+bool equal2(const char * p1,const char * p2)
 {
 	//size_t temp{ 0 };
 	cout << "isPoint:??" << std::is_pointer<char *>::value << endl;
-	cout<<"comp"<<strcmp(p1, p2)<<endl;
+	cout<<"comp-"<<!strcmp(p1, p2)<<endl;
 	cout << *p1<<*p2 << endl;
+
+	return !strcmp(p1, p2);
 	//if (strcmp(p1 == p2)) {
 	//return p1 == p2;
 	//}
